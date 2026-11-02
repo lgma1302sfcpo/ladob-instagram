@@ -16,6 +16,7 @@ for(const [key,priceEnv,amount] of [['ebook','STRIPE_PRICE_EBOOK',1900],['guia',
  await stripe.products.update(price.product,{metadata:{brand:'ladobdomercado',key}});
 }
 const site='https://ladob-instagram.vercel.app';setEnv('SITE_URL',site);
+setEnv('STRIPE_MODE','test');
 const url=site+'/api/webhook';const endpoints=await stripe.webhookEndpoints.list({limit:100});
 let webhook=endpoints.data.find(e=>e.url===url);
 if(webhook){if(!env.STRIPE_WEBHOOK_SECRET)throw Error('Webhook já existe, mas o segredo não está no arquivo local. Recupere-o no Dashboard.');}
@@ -25,8 +26,8 @@ await writeFile(file,raw);
 
 const project=JSON.parse(await readFile('.vercel/project.json','utf8'));
 const auth=JSON.parse(await readFile(join(process.env.APPDATA,'com.vercel.cli','Data','auth.json'),'utf8'));
-const names=['SITE_URL','STRIPE_SECRET_KEY','STRIPE_WEBHOOK_SECRET','STRIPE_PRICE_EBOOK','STRIPE_PRICE_GUIA','DOWNLOAD_SIGNING_SECRET'];
-const values=names.map(key=>({key,value:env[key],type:'encrypted',target:['production','preview','development']}));
+const names=['SITE_URL','STRIPE_MODE','STRIPE_SECRET_KEY','STRIPE_WEBHOOK_SECRET','STRIPE_PRICE_EBOOK','STRIPE_PRICE_GUIA','DOWNLOAD_SIGNING_SECRET'];
+const values=names.map(key=>({key,value:env[key],type:'encrypted',target:['preview','development']}));
 const response=await fetch('https://api.vercel.com/v10/projects/'+project.projectId+'/env?teamId='+project.orgId+'&upsert=true',{method:'POST',headers:{Authorization:'Bearer '+auth.token,'Content-Type':'application/json'},body:JSON.stringify(values)});
 if(!response.ok){console.error('Falha ao configurar ambiente Vercel, HTTP',response.status);process.exit(1);}
 console.log(JSON.stringify({account:account.id,mode:'test',webhook:{id:webhook.id,url:webhook.url,events:webhook.enabled_events},vercelProject:project.projectId,configuredVariables:names},null,2));

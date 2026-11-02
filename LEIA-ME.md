@@ -16,7 +16,7 @@ A entrega é somente por download após confirmação do pagamento, com suporte 
 - Chave existente de teste, segredo do webhook, IDs dos preços e segredo HMAC no `.env.local` ignorado pelo Git e nas variáveis criptografadas da Vercel.
 - Vercel Blob privado `ladob-pdfs-private`, região iad1, Estados Unidos. Os PDFs foram enviados e conferidos por SHA-256. Sem assinatura, retornaram HTTP 403.
 
-O alvo Production da hospedagem Vercel não significa Stripe em produção. O código recusa chaves e sessões de produção. O site informa que os pagamentos são de teste. Não foi feita cobrança real.
+O alvo Production da hospedagem Vercel não significa Stripe em produção. `STRIPE_MODE` determina o ambiente, com padrão `test`. O código aceita produção apenas com modo `live` e chave real correspondente, e rejeita mistura de ambientes. O aviso do site consulta `/api/payment-config`. Não foi feita cobrança real.
 
 ## Rodar
 
@@ -35,15 +35,16 @@ Abra http://localhost:3000. Para testar localmente, `SITE_URL` deve apontar para
 | Nome | Finalidade |
 | --- | --- |
 | SITE_URL | Origem exata, sem barra final. |
-| STRIPE_SECRET_KEY | Chave sk_test_ da conta NexoFrame. |
-| STRIPE_WEBHOOK_SECRET | Segredo whsec_ do endpoint de teste. |
+| STRIPE_MODE | test (padrão) ou live, explícito para produção. |
+| STRIPE_SECRET_KEY | Chave sk_ ou rk_ da conta NexoFrame, do mesmo ambiente. |
+| STRIPE_WEBHOOK_SECRET | Segredo whsec_ do endpoint do mesmo ambiente. |
 | STRIPE_PRICE_EBOOK, STRIPE_PRICE_GUIA | IDs dos preços únicos em BRL. |
 | DOWNLOAD_SIGNING_SECRET | Segredo exclusivo de pelo menos 32 bytes. |
 | BLOB_READ_WRITE_TOKEN | Credencial do armazenamento privado vinculada pela Vercel. |
 | BLOB_PATH_EBOOK | Opcional, padrão products/ebook-lado-b.pdf. |
 | BLOB_PATH_GUIA | Opcional, padrão products/guia-perfil-ia.pdf. |
 
-Não coloque segredos em código do navegador, Git, mensagens de chat, argumentos de shell ou prints. O script `configure-test.mjs` usa as credenciais locais sem imprimi-las e recusa conta divergente ou chave de produção. Ele configura o webhook e as variáveis da Vercel para este projeto. Os preços usam lookup keys `ladob_ebook_v1` e `ladob_guia_v1`; `npm run stripe:setup` reutiliza os preços já configurados e não os duplica.
+Não coloque segredos em código do navegador, Git, mensagens de chat, argumentos de shell ou prints. O script `configure-test.mjs` usa as credenciais locais sem imprimi-las e recusa conta divergente ou chave de produção. Ele configura o webhook de teste e as variáveis de Preview e Development da Vercel, sem sobrescrever Production. Os preços usam lookup keys `ladob_ebook_v1` e `ladob_guia_v1`; `npm run stripe:setup` reutiliza os preços já configurados e não os duplica.
 
 ## Como o acesso funciona
 
@@ -90,6 +91,10 @@ A URL pública de produção do site recebe os webhooks sem login. Preserve a pr
 
 Use cartão de teste 4242 4242 4242 4242, validade futura e CVC fictício. No Pix, use apenas o simulador oficial da Stripe, nunca um aplicativo bancário real. Confira ambos os PDFs, os hashes dos downloads, o bloqueio enquanto pendente, token expirado/adulterado, reenvio do webhook e reembolso de teste. Os scripts test-hosted.mjs e os relatórios em output ajudam nessa verificação; não publique os arquivos de sessões de teste, pois contêm links de acesso.
 
-Antes das vendas reais, preencha vendedor/privacidade, valide o guia e insira suas capturas. A mudança para produção exige aprovação explícita e revisão dos bloqueios em stripe(), paidOrder(), checkout, webhook e tokens cs_test_. Produtos e preços reais devem ser criados separadamente. Trocar só a chave não ativa produção.
+Antes das vendas reais, preencha vendedor/privacidade, valide o guia e insira suas capturas. O titular autorizou a troca para produção; a chave real ainda precisa ser criada. Produtos, preços e webhook reais são separados dos testes. Trocar somente a chave não ativa produção.
+
+Após fornecer a chave real de forma segura em `.env.live.local` (ignorado pelo Git), execute `node scripts/configure-live.mjs`. O script confere a conta e a habilitação para cobranças, cria/reutiliza os dois preços e o webhook reais, gera um segredo de download exclusivo e atualiza somente as variáveis Production da Vercel. Exige permissões de escrita em Checkout Sessions, Products, Prices e Webhook Endpoints, e leitura em Accounts, Payment Intents e Charges and Refunds. Não concede permissão de repasses. Publique um novo deploy depois de atualizar variáveis.
+
+Execute `node --env-file=.env.live.local scripts/verify-live.mjs` para verificar o ambiente publicado, os dois checkouts reais e o bloqueio de acesso de pedidos ainda não pagos, sem confirmar cobranças. Guarde `output/live-checkouts.json` em privado. Testes simulados com cartões fictícios e eventos fabricados devem usar somente o modo de teste; o script `test-hosted.mjs` não aceita ambiente live.
 
 O Lighthouse mobile local inicial marcou 92 em desempenho e 100 nas demais categorias. Repita no deploy final e em aparelho físico; isso não garante 60 fps em todo celular.

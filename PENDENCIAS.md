@@ -35,8 +35,8 @@ Os marcadores de credenciais em `.env.example` são intencionais. As credenciais
 - Página 23: linha do tempo do CapCut com projeto próprio.
 - Página 30: identificação de IA nas telas de Instagram e TikTok.
 
-## Aprovação final
+## Migração autorizada para produção
 
-Concluir a homologação de cartão, Pix, webhook, downloads ponta a ponta antes de mudar para produção. Não foram criados produtos Stripe de produção nem feitas cobranças reais. A habilitação para vendas reais exige aprovação explícita do titular e remoção revisada dos bloqueios de teste.
+A homologação anterior de cartão, Pix e downloads passou em teste. O titular autorizou a mudança de ambiente. O código aceita produção com `STRIPE_MODE=live`, mantendo a verificação de ambiente em toda a entrega. Falta criar a chave real, provisionar preços/webhook, atualizar as variáveis Production da Vercel, publicar e verificar a abertura dos checkouts. Nenhuma cobrança real foi feita. Os dados editoriais e legais continuam pendentes a pedido do titular.
 
 Não há combo porque o preço não foi definido. Netflix, Nokia e Starbucks foram substituídas por Hertz, Chrysler e Delta para sustentar casos de insolvência documentada.

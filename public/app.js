@@ -1,4 +1,8 @@
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+fetch('/api/payment-config',{signal:AbortSignal.timeout(10000)}).then(async response=>{
+ if(!response.ok)return;const data=await response.json();const notice=document.querySelector('.test-notice');
+ if(notice&&data.mode==='live')notice.textContent='PAGAMENTO SEGURO COM STRIPE · DOWNLOAD APÓS A CONFIRMAÇÃO';
+}).catch(()=>{});
 const canvas=document.querySelector('#market');
 if(canvas){const ctx=canvas.getContext('2d',{alpha:true});let w,h,raf=0,last=0,time=0;
  const resize=()=>{w=innerWidth;h=innerHeight;const dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);draw();};

@@ -1,4 +1,7 @@
 import {writeFile} from 'node:fs/promises';import Stripe from 'stripe';
+import {liveMode,stripe} from '../lib/commerce.mjs';
+if(liveMode())throw Error('Use o ambiente de teste para simular eventos');
+stripe();
 const base='https://ladob-instagram.vercel.app';const result={},sessions={};
 const html=await fetch(base);result.siteStatus=html.status;result.testNotice=(await html.text()).includes('PAGAMENTOS EM MODO DE TESTE');
 for(const product of ['ebook','guia']){
