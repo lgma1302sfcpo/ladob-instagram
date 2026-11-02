@@ -7,13 +7,13 @@ GitHub: https://github.com/lgma1302sfcpo/ladob-instagram
 
 A entrega é somente por download após confirmação do pagamento, com suporte pelo WhatsApp (13) 99121-3068. Não há envio por e-mail, Resend, Redis, Upstash ou S3 externo. O e-mail coletado pela Stripe identifica a compra para suporte e arrependimento.
 
-## Configuração concluída em teste
+## Configuração concluída em produção
 
 - Projeto Vercel `lgma1302sfcpos-projects/ladob-instagram`, vinculado ao GitHub.
 - Dois produtos Stripe, pagamento único BRL: e-book R$ 19 e guia R$ 97.
 - Cartão e Pix disponíveis e ligados na conta.
 - Webhook em `/api/webhook`, com assinatura verificada e eventos `checkout.session.completed` e `checkout.session.async_payment_succeeded`.
-- Chave existente de teste, segredo do webhook, IDs dos preços e segredo HMAC no `.env.local` ignorado pelo Git e nas variáveis criptografadas da Vercel.
+- Chave restrita real, segredo do webhook real, IDs dos preços e segredo HMAC exclusivo no `.env.live.local` ignorado pelo Git e nas variáveis criptografadas Production da Vercel. `.env.local`, Preview e Development conservam as credenciais de teste.
 - Vercel Blob privado `ladob-pdfs-private`, região iad1, Estados Unidos. Os PDFs foram enviados e conferidos por SHA-256. Sem assinatura, retornaram HTTP 403.
 
 O alvo Production da hospedagem Vercel não significa Stripe em produção. `STRIPE_MODE` determina o ambiente, com padrão `test`. O código aceita produção apenas com modo `live` e chave real correspondente, e rejeita mistura de ambientes. O aviso do site consulta `/api/payment-config`. Não foi feita cobrança real.
@@ -91,7 +91,7 @@ A URL pública de produção do site recebe os webhooks sem login. Preserve a pr
 
 Use cartão de teste 4242 4242 4242 4242, validade futura e CVC fictício. No Pix, use apenas o simulador oficial da Stripe, nunca um aplicativo bancário real. Confira ambos os PDFs, os hashes dos downloads, o bloqueio enquanto pendente, token expirado/adulterado, reenvio do webhook e reembolso de teste. Os scripts test-hosted.mjs e os relatórios em output ajudam nessa verificação; não publique os arquivos de sessões de teste, pois contêm links de acesso.
 
-Antes das vendas reais, preencha vendedor/privacidade, valide o guia e insira suas capturas. O titular autorizou a troca para produção; a chave real ainda precisa ser criada. Produtos, preços e webhook reais são separados dos testes. Trocar somente a chave não ativa produção.
+Os dados de vendedor/privacidade, a validação do guia e as capturas próprias continuam pendentes. O titular autorizou a troca para produção e a criação da chave real restrita; produtos, preços, webhook e variáveis Production foram configurados. Produtos, preços e webhook reais são separados dos testes. Trocar somente a chave não ativa produção.
 
 Após fornecer a chave real de forma segura em `.env.live.local` (ignorado pelo Git), execute `node scripts/configure-live.mjs`. O script confere a conta e a habilitação para cobranças, cria/reutiliza os dois preços e o webhook reais, gera um segredo de download exclusivo e atualiza somente as variáveis Production da Vercel. Exige permissões de escrita em Checkout Sessions, Products, Prices e Webhook Endpoints, e leitura em Accounts, Payment Intents e Charges and Refunds. Não concede permissão de repasses. Publique um novo deploy depois de atualizar variáveis.
 

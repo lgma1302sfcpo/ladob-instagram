@@ -32,8 +32,8 @@ Este repositório é público e contém somente o site, suas capas e a implement
 
 Importe o repositório na Vercel com framework **Other**, diretório de saída **public** e sem comando de build. Cadastre as variáveis do ambiente. Configure `/api/webhook` na Stripe em modo de teste. Execute `npm test` e valide os pagamentos completos com cartão e Pix de teste antes das vendas.
 
-O site está em https://ladob-instagram.vercel.app, com Stripe configurada em teste, webhook e PDFs privados. A entrega foi definida pelo titular como download direto, com suporte pelo WhatsApp. Não é necessária conta Resend. Os dados do vendedor e a política de privacidade ainda precisam ser completados antes das vendas. Consulte [LEIA-ME.md](LEIA-ME.md) e [PENDENCIAS.md](PENDENCIAS.md).
+O site está em https://ladob-instagram.vercel.app, com Stripe configurada em produção, webhook real e PDFs privados. A entrega foi definida pelo titular como download direto, com suporte pelo WhatsApp. Não é necessária conta Resend. Os dados do vendedor e a política de privacidade continuam pendentes. Consulte [LEIA-ME.md](LEIA-ME.md) e [PENDENCIAS.md](PENDENCIAS.md).
 
-O titular autorizou a migração para produção. O código está preparado, mas a ativação depende da criação segura da chave real. `scripts/configure-live.mjs` configura exclusivamente o ambiente Production da Vercel, preservando teste no desenvolvimento e no preview. `scripts/verify-live.mjs` confere os checkouts sem confirmar cobranças.
+O titular autorizou a migração para produção e a criação da chave restrita da integração. `scripts/configure-live.mjs` configura exclusivamente o ambiente Production da Vercel, preservando teste no desenvolvimento e no preview. `scripts/verify-live.mjs` confere os checkouts sem confirmar cobranças. Nenhuma cobrança real foi feita durante a configuração.
 
 Conteúdo informativo e educacional. Não é recomendação de investimento.

@@ -4,9 +4,9 @@
 
 - Site publicado: https://ladob-instagram.vercel.app
 - GitHub vinculado: lgma1302sfcpo/ladob-instagram.
-- Dois produtos Stripe em teste: R$ 19 e R$ 97, únicos em BRL.
+- Dois produtos Stripe em produção: R$ 19 e R$ 97, únicos em BRL, separados dos produtos de teste.
 - Cartão e Pix disponíveis e ligados na conta.
-- Webhook de teste com os dois eventos de confirmação e verificação de assinatura no servidor.
+- Webhook real com os dois eventos de confirmação e verificação de assinatura no servidor.
 - Chaves locais ignoradas pelo Git e variáveis criptografadas na Vercel.
 - Dois PDFs no Vercel Blob privado, região iad1 (Estados Unidos), com hashes conferidos.
 - URLs de download privadas com expiração, e estado de acesso armazenado na Stripe.
@@ -37,6 +37,6 @@ Os marcadores de credenciais em `.env.example` são intencionais. As credenciais
 
 ## Migração autorizada para produção
 
-A homologação anterior de cartão, Pix e downloads passou em teste. O titular autorizou a mudança de ambiente. O código aceita produção com `STRIPE_MODE=live`, mantendo a verificação de ambiente em toda a entrega. Falta criar a chave real, provisionar preços/webhook, atualizar as variáveis Production da Vercel, publicar e verificar a abertura dos checkouts. Nenhuma cobrança real foi feita. Os dados editoriais e legais continuam pendentes a pedido do titular.
+A homologação anterior de cartão, Pix e downloads passou em teste. O titular autorizou a mudança de ambiente e a criação da chave restrita real. A chave, os dois preços, o webhook e as variáveis Production da Vercel foram configurados. O código aceita produção com `STRIPE_MODE=live`, mantendo a verificação de ambiente em toda a entrega. Nenhuma cobrança real foi feita. Os dados editoriais e legais continuam pendentes a pedido do titular.
 
 Não há combo porque o preço não foi definido. Netflix, Nokia e Starbucks foram substituídas por Hertz, Chrysler e Delta para sustentar casos de insolvência documentada.
