@@ -18,6 +18,7 @@ Copie `.env.example` para `.env.local` e preencha as variáveis somente no compu
 - Ambientes Stripe separados por `STRIPE_MODE=test|live`, com validação de chaves, preços, sessões, tokens e eventos do mesmo ambiente.
 - Dois produtos, pagamento único em BRL: R$ 19 e R$ 97.
 - Checkout com cartão e Pix, sujeito à habilitação da conta.
+- Logo do Lado B, fundo grafite e botões amarelos configurados por sessão de checkout.
 - Webhook com verificação de assinatura e confirmação de pagamento.
 - Download na página de confirmação, estado de acesso na Stripe e PDFs no Vercel Blob privado.
 - Links de acesso assinados, com validade limitada e nova validação do pagamento.
