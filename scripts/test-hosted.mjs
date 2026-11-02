@@ -1,9 +1,11 @@
 import {writeFile} from 'node:fs/promises';import Stripe from 'stripe';
-import {liveMode,stripe} from '../lib/commerce.mjs';
+import {liveMode,stripe,baseURL} from '../lib/commerce.mjs';
 if(liveMode())throw Error('Use o ambiente de teste para simular eventos');
 stripe();
-const base='https://ladob-instagram.vercel.app';const result={},sessions={};
-const html=await fetch(base);result.siteStatus=html.status;result.testNotice=(await html.text()).includes('PAGAMENTOS EM MODO DE TESTE');
+const base=baseURL();const result={},sessions={};
+const config=await fetch(base+'/api/payment-config');
+if(!config.ok||(await config.json()).mode!=='test')throw Error('O site de destino precisa estar em modo de teste');
+const html=await fetch(base);result.siteStatus=html.status;result.mode='test';
 for(const product of ['ebook','guia']){
  const r=await fetch(base+'/api/checkout',{method:'POST',headers:{origin:base,'content-type':'application/json'},body:JSON.stringify({product})});const data=await r.json();
  if(!r.ok||!data.url?.startsWith('https://checkout.stripe.com/'))throw Error('Falha no checkout '+product+': HTTP '+r.status);
