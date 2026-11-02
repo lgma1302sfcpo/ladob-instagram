@@ -8,3 +8,9 @@ tmp/
 content/
 output/
 public/assets/montserrat.woff2
+scripts/update_docs.py
+scripts/update-hosted-copy.py
+scripts/finalize-download-only.py
+
+.vercel
+.env*

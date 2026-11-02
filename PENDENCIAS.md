@@ -1,57 +1,42 @@
 # Pendências antes das vendas
 
-Esta é uma entrega local com integração preparada. Nenhum pagamento real, produto Stripe de produção ou deploy foi executado.
+## Já configurado
 
-## Todos os marcadores de dados
+- Site publicado: https://ladob-instagram.vercel.app
+- GitHub vinculado: lgma1302sfcpo/ladob-instagram.
+- Dois produtos Stripe em teste: R$ 19 e R$ 97, únicos em BRL.
+- Cartão e Pix disponíveis e ligados na conta.
+- Webhook de teste com os dois eventos de confirmação e verificação de assinatura no servidor.
+- Chaves locais ignoradas pelo Git e variáveis criptografadas na Vercel.
+- Dois PDFs no Vercel Blob privado, região iad1 (Estados Unidos), com hashes conferidos.
+- URLs de download privadas com expiração, e estado de acesso armazenado na Stripe.
 
-### Credenciais e serviços (.env.local / Vercel)
+## Formato final escolhido
 
-- STRIPE_SECRET_KEY: [PREENCHER] sk_test_ da conta NexoFrame
-- STRIPE_WEBHOOK_SECRET: [PREENCHER] whsec_
-- STRIPE_PRICE_EBOOK: [PREENCHER] price_
-- STRIPE_PRICE_GUIA: [PREENCHER] price_
-- DOWNLOAD_SIGNING_SECRET: [PREENCHER] segredo aleatório de pelo menos 32 bytes
-- RESEND_API_KEY: [PREENCHER]
-- EMAIL_FROM: [PREENCHER] NexoFrame <entregas@dominio-verificado>
-- UPSTASH_REDIS_REST_URL: [PREENCHER]
-- UPSTASH_REDIS_REST_TOKEN: [PREENCHER]
-- S3_REGION: [PREENCHER]
-- S3_BUCKET: [PREENCHER]
-- S3_ACCESS_KEY_ID: [PREENCHER]
-- S3_SECRET_ACCESS_KEY: [PREENCHER]
+Somente download após pagamento, com suporte pelo WhatsApp. Nenhum serviço de e-mail ou Redis é necessário.
 
-1. public\index.html: [PREENCHER: razão social, CPF/CNPJ e endereço comercial]
+## Todos os dados editoriais e legais ainda marcados
 
-2. public\privacidade.html: [PREENCHER: razão social ou nome civil, CPF/CNPJ e endereço comercial do vendedor]
-3. public\privacidade.html: [PREENCHER: e-mail do controlador]
-4. public\privacidade.html: [PREENCHER: provedor, região e países de tratamento]
-5. public\privacidade.html: [PREENCHER: registro dos países e mecanismos efetivamente contratados]
-6. public\privacidade.html: [PREENCHER: tabela de retenção com prazos de pedidos, logs, e-mails, deduplicação, suporte e descarte nos fornecedores]
+- [PREENCHER: razão social, CPF/CNPJ e endereço comercial] no rodapé do site.
+- [PREENCHER: razão social ou nome civil, CPF/CNPJ e endereço comercial do vendedor] na privacidade.
+- [PREENCHER: e-mail do controlador] na privacidade.
+- [PREENCHER: registro dos países e mecanismos efetivamente contratados] na privacidade.
+- [PREENCHER: tabela de retenção com prazos de pedidos, logs, disponibilização do download, suporte e descarte nos fornecedores] na privacidade.
+- [PREENCHER: validação do fluxo real, responsáveis e exemplos próprios autorizados] no guia.
 
-7. content\guide.json: [PREENCHER: validação do fluxo real, responsáveis e exemplos próprios autorizados]
+Os marcadores de credenciais em `.env.example` são intencionais. As credenciais de Stripe e Blob já estão no ambiente privado; os valores reais nunca devem substituir esse modelo público.
 
-## Capturas reais a inserir no guia
+## Capturas reais do guia
 
-- Página 6: [PRINT: ficha real de checagem com URLs e dados pessoais ocultados]
-- Página 10: [PRINT: conversa real no Claude mostrando ficha de fatos e instruções, sem dados privados]
-- Página 17: [PRINT: configurações reais da voz no ElevenLabs, com modelo, velocidade e data visíveis]
-- Página 19: [PRINT: página real de uma imagem no Commons, destacando autor, licença e ligação para os termos]
-- Página 23: [PRINT: linha do tempo real no CapCut com narração, cartões e legendas do projeto autorizado]
-- Página 30: [PRINT: telas reais de publicação do Instagram e TikTok com as opções de identificação de IA da conta]
+- Página 6: ficha de checagem, com URLs e sem dados privados.
+- Página 10: conversa no Claude com ficha e instruções.
+- Página 17: voz no ElevenLabs, modelo, velocidade e data.
+- Página 19: imagem no Commons com autor e licença.
+- Página 23: linha do tempo do CapCut com projeto próprio.
+- Página 30: identificação de IA nas telas de Instagram e TikTok.
 
-## Etapas que exigem configuração da conta
+## Aprovação final
 
-- Validar o guia como método efetivamente usado pelo perfil; substituir o marcador editorial.
-- Inserir as seis capturas próprias e revisar os PDFs.
-- Confirmar a identificação completa do vendedor e a política de retenção/transferências de dados.
-- Configurar chaves de teste da Stripe e rodar npm run stripe:setup para criar os dois produtos.
-- Confirmar elegibilidade/ativação de Pix no painel da Stripe.
-- Configurar domínio verificado de e-mail, Redis e bucket privado com os PDFs corretos.
-- Testar cartão e Pix de teste, webhook, reenvio, e-mails e download ponta a ponta.
-- Vincular Vercel, publicar preview, definir domínio e URL absoluta de og:image/canonical.
-- Repetir o Lighthouse no deploy final e em celular físico.
-- Obter aprovação explícita antes de qualquer alteração para produção.
+Concluir a homologação de cartão, Pix, webhook, downloads ponta a ponta antes de mudar para produção. Não foram criados produtos Stripe de produção nem feitas cobranças reais. A habilitação para vendas reais exige aprovação explícita do titular e remoção revisada dos bloqueios de teste.
 
-Não há combo: o preço não foi definido e a seção foi omitida conforme solicitado.
-
-Netflix, Nokia e Starbucks foram substituídas por Hertz, Chrysler e Delta para manter casos de insolvência documentada.
+Não há combo porque o preço não foi definido. Netflix, Nokia e Starbucks foram substituídas por Hertz, Chrysler e Delta para sustentar casos de insolvência documentada.

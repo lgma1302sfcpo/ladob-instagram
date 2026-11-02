@@ -19,7 +19,7 @@ Copie `.env.example` para `.env.local` e preencha as variáveis somente no compu
 - Dois produtos, pagamento único em BRL: R$ 19 e R$ 97.
 - Checkout com cartão e Pix, sujeito à habilitação da conta.
 - Webhook com verificação de assinatura e confirmação de pagamento.
-- E-mail por Resend, deduplicação em Redis e PDFs em bucket S3 privado.
+- Download na página de confirmação, estado de acesso na Stripe e PDFs no Vercel Blob privado.
 - Links de acesso assinados, com validade limitada e nova validação do pagamento.
 
 Depois de configurar a chave de teste, `npm run stripe:setup` cria/reutiliza os produtos e preços de teste. Nenhuma chave de produção é aceita pelo código atual.
@@ -32,6 +32,6 @@ Este repositório é público e contém somente o site, suas capas e a implement
 
 Importe o repositório na Vercel com framework **Other**, diretório de saída **public** e sem comando de build. Cadastre as variáveis do ambiente. Configure `/api/webhook` na Stripe em modo de teste. Execute `npm test` e valide os pagamentos completos com cartão e Pix de teste antes das vendas.
 
-Os dados do vendedor, a política de privacidade e a infraestrutura ainda devem ser preenchidos. A presença do código não significa que a conta Stripe, o envio de e-mails ou a Vercel já estejam configurados. Consulte [LEIA-ME.md](LEIA-ME.md) e [PENDENCIAS.md](PENDENCIAS.md).
+O site está em https://ladob-instagram.vercel.app, com Stripe configurada em teste, webhook e PDFs privados. A entrega foi definida pelo titular como download direto, com suporte pelo WhatsApp. Não é necessária conta Resend. Os dados do vendedor e a política de privacidade ainda precisam ser completados antes das vendas. Consulte [LEIA-ME.md](LEIA-ME.md) e [PENDENCIAS.md](PENDENCIAS.md).
 
 Conteúdo informativo e educacional. Não é recomendação de investimento.

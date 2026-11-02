@@ -1,6 +1,6 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import Stripe from 'stripe';
-import {makeToken,readToken,paidOrder,stripe} from '../lib/commerce.mjs';
+import {makeToken,readToken,paidOrder,stripe,fulfill} from '../lib/commerce.mjs';
 import webhook from '../api/webhook.mjs';
 import {Readable} from 'node:stream';
 process.env.DOWNLOAD_SIGNING_SECRET='test-only-secret-32-characters-long-123';
@@ -15,3 +15,13 @@ test('chaves de produção são recusadas',()=>{process.env.STRIPE_SECRET_KEY='s
 function res(){return {headers:{},setHeader(k,v){this.headers[k]=v;},status(n){this.code=n;return this;},json(v){this.body=v;return this;}};}
 test('webhook rejeita assinatura inválida sem chamar rede',async()=>{process.env.STRIPE_SECRET_KEY='sk_test_example';process.env.STRIPE_WEBHOOK_SECRET='whsec_test';const req=Readable.from([Buffer.from('{}')]);req.method='POST';req.headers={'stripe-signature':'invalid'};const r=res();await webhook(req,r);assert.equal(r.code,400);});
 test('webhook Pix pendente assinado não entrega o PDF',async()=>{const s=new Stripe('sk_test_example');const payload=JSON.stringify({id:'evt_x',livemode:false,type:'checkout.session.completed',data:{object:{id:sid,payment_status:'unpaid'}}});const req=Readable.from([Buffer.from(payload)]);req.method='POST';req.headers={'stripe-signature':s.webhooks.generateTestHeaderString({payload,secret:'whsec_test'})};const r=res();await webhook(req,r);assert.equal(r.body.pending,true);});
+test('pagamento confirmado registra download e replay não repete a operação',async()=>{
+ const client=mock();let metadata={product:'ebook'},updates=0;
+ const retrieve=client.checkout.sessions.retrieve;client.checkout.sessions.retrieve=async()=>({...await retrieve(),metadata});
+ client.checkout.sessions.update=async(id,body,options)=>{updates++;assert.equal(options.idempotencyKey,'download-ready-'+sid);metadata={...metadata,...body.metadata};return {id,metadata};};
+ await fulfill(client,sid);assert.equal(metadata.download_ready,'true');assert.equal(metadata.delivery_method,'download');await fulfill(client,sid);assert.equal(updates,1);
+});
+test('pagamento pendente não registra disponibilização de download',async()=>{
+ const client=mock({payment_status:'unpaid'});let updates=0;client.checkout.sessions.update=async()=>{updates++;};
+ await assert.rejects(fulfill(client,sid));assert.equal(updates,0);
+});
