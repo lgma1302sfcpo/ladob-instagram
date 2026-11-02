@@ -1,0 +1,10 @@
+node_modules/
+.env*
+!.env.example
+.vercel/
+private/*
+!private/LEIA-ME.md
+tmp/
+content/
+output/
+public/assets/montserrat.woff2

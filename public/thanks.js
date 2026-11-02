@@ -1,0 +1,6 @@
+const sid=new URLSearchParams(location.search).get('session_id');
+// Reduz exposição do identificador em capturas da barra e no histórico.
+if(sid)history.replaceState(null,'',location.pathname);
+const retry=document.querySelector('#retry');let attempts=0,busy=false;
+async function check(){if(busy)return;busy=true;retry.disabled=true;try{const response=await fetch('/api/session?session_id='+encodeURIComponent(sid||''),{cache:'no-store',signal:AbortSignal.timeout(20000)});const data=await response.json();if(!response.ok)throw new Error(data.error);document.querySelector('#payment-title').textContent='Pagamento confirmado!';document.querySelector('#payment-status').textContent=data.delivered?'O link chegou no seu e-mail. Você também pode baixar por aqui.':'Seu PDF já está disponível aqui. A entrega por e-mail está em processamento.';const link=document.querySelector('#download');link.hidden=false;link.href=data.download;if(!data.delivered&&attempts++<8)setTimeout(check,3000);}catch(error){document.querySelector('#payment-title').textContent='Aguardando confirmação.';document.querySelector('#payment-status').textContent=sid?(error.message||'Não foi possível consultar. Tente novamente.'):'Abra esta página a partir da confirmação do seu checkout.';}finally{busy=false;retry.disabled=false;}}
+retry.addEventListener('click',check);check();

@@ -1,0 +1,5 @@
+import lighthouse from 'lighthouse';import {launch} from 'chrome-launcher';import {mkdir,writeFile} from 'node:fs/promises';import {server} from './dev.mjs';
+await mkdir('output/lighthouse',{recursive:true});
+const browser=await launch({chromePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',chromeFlags:['--headless','--no-sandbox','--disable-gpu']});
+try{const result=await lighthouse('http://localhost:3000',{port:browser.port,output:['html','json'],onlyCategories:['performance','accessibility','best-practices','seo'],logLevel:'error'},{extends:'lighthouse:default',settings:{formFactor:'mobile',screenEmulation:{mobile:true,width:390,height:844,deviceScaleFactor:1,disabled:false}}});await writeFile('output/lighthouse/mobile.html',result.report[0]);await writeFile('output/lighthouse/mobile.json',result.report[1]);console.log(JSON.stringify(Object.fromEntries(Object.entries(result.lhr.categories).map(([k,v])=>[k,Math.round(v.score*100)]))));}
+finally{await browser.kill();server.close();}
